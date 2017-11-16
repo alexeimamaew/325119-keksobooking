@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей Мамаев](https://up.htmlacademy.ru/javascript/11/user/325119).
-* Наставник: `Неизвестно`.
+* Наставник: `Никита Пиковец`.
 
 ---
 
