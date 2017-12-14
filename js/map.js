@@ -21,8 +21,8 @@
     popup = null;
 
 
-//  Функция получает удобства в объявлениях
-  function getFeatures(OFFER_FEATURES) {
+  //  Функция получает удобства в объявлениях
+    function getFeatures(OFFER_FEATURES) {
     var listLength = OFFER_FEATURES.length;
     var featureString = "";
     for (var i = 0; i < listLength; i++) {
@@ -46,7 +46,7 @@
   }
 
 
-   // создание массива чисел величиной  number  и его перетасовка
+  // создание массива чисел величиной  number  и его перетасовка
   function createArr(number) {
     var arr = [];
     for (var i = 0; i < number; i++) {
@@ -56,7 +56,7 @@
   }
 
 
-    // случайные удобства помещений
+  // случайные удобства помещений
   function setFeatureRange() {
     var optionLength = OFFER_FEATURES.length;
     var featureAmount = getRandomFromRange(1, optionLength);
@@ -68,7 +68,7 @@
     return featureArray;
   }
 
-    //функция создания карточек объявлений
+  //функция создания карточек объявлений
   function createApartments(number, titles, type, checkin) {
     var result = [],
       obj = {},
