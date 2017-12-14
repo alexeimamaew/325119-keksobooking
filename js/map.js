@@ -20,9 +20,10 @@
     prefClickAtButton = null,
     popup = null;
 
-  //Функция получает удобства в объявлениях
-  function getFeatures(listLength) {
-    listLength = OFFER_FEATURES.length;
+
+//  Функция получает удобства в объявлениях
+  function getFeatures(OFFER_FEATURES) {
+    var listLength = OFFER_FEATURES.length;
     var featureString = "";
     for (var i = 0; i < listLength; i++) {
       featureString += "<li class=\'feature feature--" + OFFER_FEATURES[i] + "\' ></li>";
@@ -30,13 +31,45 @@
     return featureString;
   }
 
-  //функция получает рондомное значение в диапозоне min/max
+  // функция получает рондомное значение в диапозоне min/max
   function getRandomFromRange(min, max) {
     return Math.round(min + Math.random() * (max - min));
   }
 
-  //функция создания карточек объявлений
-  function createApartments(number, titles, type, checkin, features) {
+
+  // функция перетасовки значений в массиве
+  function shuffle(array) {
+    array.sort(function () {
+      return Math.random() - 0.5;
+    });
+    return array;
+  }
+
+
+   // создание массива чисел величиной  number  и его перетасовка
+  function createArr(number) {
+    var arr = [];
+    for (var i = 0; i < number; i++) {
+      arr[i] = i;
+    }
+    return shuffle(arr);
+  }
+
+
+    // случайные удобства помещений
+  function setFeatureRange() {
+    var optionLength = OFFER_FEATURES.length;
+    var featureAmount = getRandomFromRange(1, optionLength);
+    var featureArray = createArr(optionLength);
+    featureArray.length = featureAmount;
+    for (var i = 0; i < featureAmount; i++) {
+      featureArray[i] = OFFER_FEATURES[featureArray[i]];
+    }
+    return featureArray;
+  }
+
+    //функция создания карточек объявлений
+  function createApartments(number, titles, type, checkin) {
     var result = [],
       obj = {},
       i;
@@ -50,10 +83,10 @@
       obj.offer.price = getRandomFromRange(1000, 1000000);
       obj.offer.type = type[getRandomFromRange(0, type.length - 1)];
       obj.offer.rooms = getRandomFromRange(1, 5);
-      obj.offer.guests = getRandomFromRange(1, 100);
+      obj.offer.guests = getRandomFromRange(1, 5);
       obj.offer.checkin = checkin[getRandomFromRange(0, checkin.length - 1)];
       obj.offer.checkout = checkin[getRandomFromRange(0, checkin.length - 1)];
-      obj.offer.features = features[0];
+      obj.offer.features = setFeatureRange();
       obj.offer.description = "";
       obj.offer.photos = [];
       obj.location.x = getRandomFromRange(300, 900);
@@ -115,12 +148,6 @@
     pin.classList.add("map__pin--active");
   }
 
-  // функция закрытия popup
-  function closeDialog() {
-    var popup = document.querySelector(".popup");
-    popup.classList.add("hidden");
-    prefClickAtButton.classList.remove("map__pin--active");
-  }
 
   //функция показывает карточки объявлений с заполненными данными
   function renderApartmentContent(obj) {
