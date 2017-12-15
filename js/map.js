@@ -18,12 +18,12 @@
     map = document.querySelector(".map"),
     popupCloseOpen = false,
     prefClickAtButton = null,
-    popup = null;
+    popup = null,
+    apartments = null;
 
-
-//  Функция получает удобства в объявлениях
-  function getFeatures(OFFER_FEATURES) {
-    var listLength = OFFER_FEATURES.length;
+  // функция получает удобства в объявлениях
+  function getFeatures(features) {
+    var listLength = features.length;
     var featureString = "";
     for (var i = 0; i < listLength; i++) {
       featureString += "<li class=\'feature feature--" + OFFER_FEATURES[i] + "\' ></li>";
@@ -36,7 +36,6 @@
     return Math.round(min + Math.random() * (max - min));
   }
 
-
   // функция перетасовки значений в массиве
   function shuffle(array) {
     array.sort(function () {
@@ -45,8 +44,7 @@
     return array;
   }
 
-
-   // создание массива чисел величиной  number  и его перетасовка
+  // создание массива чисел величиной  number  и его перетасовка
   function createArr(number) {
     var arr = [];
     for (var i = 0; i < number; i++) {
@@ -55,8 +53,7 @@
     return shuffle(arr);
   }
 
-
-    // случайные удобства помещений
+  // случайные удобства помещений
   function setFeatureRange() {
     var optionLength = OFFER_FEATURES.length;
     var featureAmount = getRandomFromRange(1, optionLength);
@@ -68,7 +65,7 @@
     return featureArray;
   }
 
-    //функция создания карточек объявлений
+  // функция создания карточек объявлений
   function createApartments(number, titles, type, checkin) {
     var result = [],
       obj = {},
@@ -101,7 +98,6 @@
 
   // функция закрытия popup
   function closeDialog() {
-    var popup = document.querySelector(".popup");
     popup.classList.add("hidden");
     prefClickAtButton.classList.remove("map__pin--active");
   }
@@ -128,39 +124,18 @@
     popupClose.addEventListener("keydown", onPopupEnterPress);
   }
 
-  //При нажатии на любой из элементов .map__pin ему добавляется класс .map__pin--active и должен показываться элемент .popup
-  function onButtonsClick() {
-    var popup = document.querySelector(".popup");
-    var srcImg = "";
-    var target = event.target;
-    var pin = target.closest(".map__pin");
-    if (!map.contains(pin) || pin.classList.contains("map__pin--main") || !pin) {
-      return;
-    }
-    if (prefClickAtButton) {
-      prefClickAtButton.classList.remove("map__pin--active"); //при нажатии на элемент скрытие класса .map__pin--active у др. элементов
-      prefClickAtButton = pin;
-    } else {
-      prefClickAtButton = pin;
-    }
-    popup.classList.remove("hidden");
-    srcImg = pin.querySelector("img").getAttribute("src");
-    shomAppartmentPopup(srcImg);
-    pin.classList.add("map__pin--active");
-  }
-
-
-  //функция показывает карточки объявлений с заполненными данными
+  // функция показывает карточки объявлений с заполненными данными
   function renderApartmentContent(obj) {
     var templateArticle = template.content.querySelector(".map__card");
     var article = null;
     var mapFilters = map.querySelector(".map__filters-container");
 
     if (popupCloseOpen === true) {
-      article = document.querySelector(".popup");
+      article = map.querySelector(".popup");
+      popup = article;
     } else {
-      article = popup;
       article = templateArticle.cloneNode(true);
+      popup = map.querySelector(".popup");
     }
     article.querySelector("h3").textContent = obj.offer.title;
     article.querySelector("small").textContent = obj.offer.address;
@@ -173,24 +148,40 @@
     article.querySelector(".popup__avatar").setAttribute("src", obj.author.avatar);
     map.insertBefore(article, mapFilters); //вставляет элемент article перед mapFilters
 
-    addPopupListener(); //добавление слушателя в popup
+    addPopupListener(); // добавление слушателя в popup
     popupCloseOpen = true;
   }
-  var apartments = createApartments(8, OFFER_TITLES, OFFER_TYPE, OFFFER_CHECKIN_CHECKOUT, OFFER_FEATURES);
-  renderApartmentContent(apartments[0]);
-
 
   function shomAppartmentPopup(string) {
-
     for (var i = 0; i < apartments.length; i++) {
       if (apartments[i].author.avatar === string) {
         renderApartmentContent(apartments[i]);
-
+        popup = map.querySelector(".popup");
       }
     }
   }
 
-  //функция расставляет pins на карте
+  // при нажатии на любой из элементов .map__pin ему добавляется класс .map__pin--active и должен показываться popup
+  function onButtonsClick() {
+    var srcImg = "";
+    var target = event.target;
+    var pin = target.closest(".map__pin");
+    if (!map.contains(pin) || pin.classList.contains("map__pin--main") || !pin) {
+      return;
+    }
+    if (prefClickAtButton) {
+      prefClickAtButton.classList.remove("map__pin--active"); //при нажатии на элемент скрытие класса .map__pin--active у др. элементов
+      prefClickAtButton = pin;
+    } else {
+      prefClickAtButton = pin;
+    }
+    srcImg = pin.querySelector("img").getAttribute("src");
+    shomAppartmentPopup(srcImg);
+    popup.classList.remove("hidden");
+    pin.classList.add("map__pin--active");
+  }
+
+  // функция расставляет pins на карте
   function addPins(array) {
     var templateBtn = template.content.querySelector(".map__pin");
     var places = map.querySelector(".map__pins");
@@ -206,10 +197,6 @@
       places.appendChild(btnsFragment);
     }
   }
-  addPins(apartments);
-
-
-
 
   // функция открытия popup по кнопке Enter
   function onPinEnterPress(evt) {
@@ -218,14 +205,13 @@
     }
   }
 
-  //Функция добвляет слушателей на pin
+  // функция добвляет слушателей на pin
   function addPinAction() {
     map.addEventListener("click", onButtonsClick);
     map.addEventListener("keydown", onPinEnterPress);
   }
 
-
-  //Активация карты / формы.  Событие mouseup на блоке map__pin--main убирает класс map--faded у карты и класс notice__form--disabled у формы
+  // активация карты / формы.  Событие mouseup на блоке map__pin--main убирает класс map--faded у карты и класс notice__form--disabled у формы
   function cardActivation() {
     var mapPinMain = map.querySelector(".map__pin--main");
     var noticeForm = document.querySelector(".notice__form");
@@ -235,8 +221,8 @@
       addPinAction();
     });
   }
-  cardActivation();
 
-
-
+  cardActivation(); // раздизабливание карты
+  apartments = createApartments(8, OFFER_TITLES, OFFER_TYPE, OFFFER_CHECKIN_CHECKOUT, OFFER_FEATURES); // создание карточек объявлений
+  addPins(apartments); // расстановка pins на карте
 }());
