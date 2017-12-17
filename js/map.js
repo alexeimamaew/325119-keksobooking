@@ -211,7 +211,7 @@
     map.addEventListener("keydown", onPinEnterPress);
   }
 
-  // активация карты / формы.  Событие mouseup на блоке map__pin--main убирает класс map--faded у карты и класс notice__form--disabled у формы
+  // активация карты / формы. Событие mouseup на блоке map__pin--main убирает класс map--faded у карты и класс notice__form--disabled у формы
   function cardActivation() {
     var mapPinMain = map.querySelector(".map__pin--main");
     var noticeForm = document.querySelector(".notice__form");
