@@ -287,7 +287,7 @@
   }
 
   // функция синхронизирует поля
- function synchronizeFields (sourceElement, destElement, synchronizeFunction) {
+  function fieldsAutoCorrect(sourceElement, destElement, synchronizeFunction) {
     if (synchronizeFunction && typeof synchronizeFunction === 'function') {
       sourceElement.addEventListener('change', function () {
         synchronizeFunction(sourceElement, destElement);
@@ -296,10 +296,10 @@
   }
 
   // объявление функций формы
-  synchronizeFields(offerTimeOut, offerTimeIn, timeAutoCorrect);
-  synchronizeFields(offerTimeIn, offerTimeOut, timeAutoCorrect);
-  synchronizeFields(offerType, offerPrice, priceAutoCorrect);
-  synchronizeFields(offerRoom, offerCapacity, roomInputValidate);
+  fieldsAutoCorrect(offerTimeOut, offerTimeIn, timeAutoCorrect);
+  fieldsAutoCorrect(offerTimeIn, offerTimeOut, timeAutoCorrect);
+  fieldsAutoCorrect(offerType, offerPrice, priceAutoCorrect);
+  fieldsAutoCorrect(offerRoom, offerCapacity, roomInputValidate);
   onload = function () {
     roomInputValidate(offerRoom, offerCapacity);
   };
