@@ -1,5 +1,6 @@
+'use strict';
+
 (function () {
-  'use strict';
 
   var OFFER_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
   var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -9,9 +10,9 @@
   var ENTER_KEYCODE = 13;
 
   var translate = {
-  flat: 'Квартира',
-  bungalo: 'Бунгало',
-  house: 'Дом'
+    flat: 'Квартира',
+    bungalo: 'Бунгало',
+    house: 'Дом'
   };
 
   var template = document.querySelector('template');
@@ -26,7 +27,7 @@
     var listLength = features.length;
     var featureString = '';
     for (var i = 0; i < listLength; i++) {
-      featureString += "<li class=\'feature feature--" + OFFER_FEATURES[i] + "\' ></li>";
+      featureString += "<li class=\"feature feature--" + OFFER_FEATURES[i] + "\" ></li>";
     }
     return featureString;
   }
@@ -67,9 +68,9 @@
 
   // функция создания карточек объявлений
   function createApartments(number, titles, type, checkin) {
-    var result = [],
-      obj = {},
-      i;
+    var result = [];
+    var obj = {};
+    var i;
 
     for (i = 0; i < number; i++) {
       obj.author = {};
@@ -146,7 +147,7 @@
     article.querySelector('.popup__features').innerHTML = getFeatures(obj.offer.features);
     article.querySelector('ul+p').textContent = obj.offer.description;
     article.querySelector('.popup__avatar').setAttribute('src', obj.author.avatar);
-    map.insertBefore(article, mapFilters); //вставляет элемент article перед mapFilters
+    map.insertBefore(article, mapFilters); // вставляет элемент article перед mapFilters
 
     addPopupListener(); // добавление слушателя в popup
     popupCloseOpen = true;
@@ -170,7 +171,7 @@
       return;
     }
     if (prefClickAtButton) {
-      prefClickAtButton.classList.remove('map__pin--active'); //при нажатии на элемент скрытие класса .map__pin--active у др. элементов
+      prefClickAtButton.classList.remove('map__pin--active'); // при нажатии на элемент скрытие класса .map__pin--active у др. элементов
       prefClickAtButton = pin;
     } else {
       prefClickAtButton = pin;
