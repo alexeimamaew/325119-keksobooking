@@ -1,25 +1,26 @@
 (function () {
   'use strict';
 
-var OFFER_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var OFFER_TYPE = ['flat', 'house', 'bungalo'];
-var OFFFER_CHECKIN_CHECKOUT = ['12:00', '13:00', '14:00'];
-var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
+  var OFFER_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
+  var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  var OFFER_TYPE = ['flat', 'house', 'bungalo'];
+  var OFFFER_CHECKIN_CHECKOUT = ['12:00', '13:00', '14:00'];
+  var ESC_KEYCODE = 27;
+  var ENTER_KEYCODE = 13;
 
-var translate = {
+  var translate = {
   flat: 'Квартира',
   bungalo: 'Бунгало',
   house: 'Дом'
-};
+  };
 
-var template = document.querySelector('template');
-var map = document.querySelector('.map');
-var popupCloseOpen = false;
-var prefClickAtButton = null;
-var popup = null;
-var apartments = null;
+  var template = document.querySelector('template');
+  var map = document.querySelector('.map');
+  var popupCloseOpen = false;
+  var prefClickAtButton = null;
+  var popup = null;
+  var apartments = null;
+
   // функция получает удобства в объявлениях
   function getFeatures(features) {
     var listLength = features.length;
