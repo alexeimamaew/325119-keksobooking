@@ -27,7 +27,7 @@
     var listLength = features.length;
     var featureString = '';
     for (var i = 0; i < listLength; i++) {
-      featureString += "<li class=\"feature feature--" + OFFER_FEATURES[i] + "\" ></li>";
+      featureString += '<li class="feature feature--' + OFFER_FEATURES[i] + '" ></li>';
     }
     return featureString;
   }
