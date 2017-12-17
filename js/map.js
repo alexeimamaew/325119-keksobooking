@@ -224,5 +224,5 @@
 
   cardActivation(); // раздизабливание карты
   apartments = createApartments(8, OFFER_TITLES, OFFER_TYPE, OFFFER_CHECKIN_CHECKOUT, OFFER_FEATURES); // создание карточек объявлений
-  addPins(apartments); // расстановка pins на карте
+  addPins(apartments); // расстановка pins на карте.
 }());
