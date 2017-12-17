@@ -239,7 +239,7 @@
 
   // функции валидации
   // функция валидация input[type = 'text']
-  function validateInput(min, max, numeric) {
+  function inputValidate(min, max, numeric) {
     return function (evt) {
       var target = evt.target;
       var inputValue = numeric ? parseFloat(target.value) : target.value.length;
@@ -254,17 +254,17 @@
   }
 
   // события ввода
-  offerTitle.addEventListener('input', validateInput(30, 100, false));
-  offerAddress.addEventListener('input', validateInput(0, 0, false));
-  offerPrice.addEventListener('input', validateInput(offerPrice.min, offerPrice.max, true));
+  offerTitle.addEventListener('input', inputValidate(30, 100, false));
+  offerAddress.addEventListener('input', inputValidate(0, 0, false));
+  offerPrice.addEventListener('input', inputValidate(offerPrice.min, offerPrice.max, true));
 
   // синхронизация  времени въезда и выезда
-  function synchronizeTime(source, dest) {
+  function timeAutoCorrect(source, dest) {
     dest.selectedIndex = source.selectedIndex;
   }
 
   // синхронизация цены в зависимости от типа объекта
-  function synchronizePrice(source, dest) {
+  function priceAutoCorrect(source, dest) {
     var minPriceValue = offerMinPrice[source.value];
     dest.min = minPriceValue;
     if (dest.value < minPriceValue) {
@@ -273,7 +273,7 @@
   }
 
   // функция валидации поля количества комнат
-  function validateRoomSelect(source, dest) {
+  function roomInputValidate(source, dest) {
     var capacityLength = dest.options.length;
     var roomValue = parseInt(source.value, 10);
     var currentCapacity = parseInt(dest.value, 10);
@@ -296,12 +296,12 @@
   }
 
   // объявление функций формы
-  synchronizeFields(offerTimeOut, offerTimeIn, synchronizeTime);
-  synchronizeFields(offerTimeIn, offerTimeOut, synchronizeTime);
-  synchronizeFields(offerType, offerPrice, synchronizePrice);
-  synchronizeFields(offerRoom, offerCapacity, validateRoomSelect);
+  synchronizeFields(offerTimeOut, offerTimeIn, timeAutoCorrect);
+  synchronizeFields(offerTimeIn, offerTimeOut, timeAutoCorrect);
+  synchronizeFields(offerType, offerPrice, priceAutoCorrect);
+  synchronizeFields(offerRoom, offerCapacity, roomInputValidate);
   onload = function () {
-    validateRoomSelect(offerRoom, offerCapacity);
+    roomInputValidate(offerRoom, offerCapacity);
   };
 
   cardActivation(); // раздизабливание карты
