@@ -27,7 +27,7 @@ window.card = (function () {
     offerDialog.classList.add('hidden');
   }
 
-  // закрытие popup мышью
+  // закрытие popup кликом мыши
   closeDialogBtn.addEventListener('click', hideCard);
 
   // закрытие при нажатии enter, когда крестик в фокусе
@@ -37,7 +37,7 @@ window.card = (function () {
     }
   });
 
-    function renderOffer(generatedOffer) {
+  function renderOffer(generatedOffer) {
     var dialogDesc = document.querySelector('.map__card');
     var dialogTemplate = dialogTemplateCopy.cloneNode(true);
     offerDialog.replaceChild(dialogTemplate, dialogDesc);
