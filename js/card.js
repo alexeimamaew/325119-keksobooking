@@ -53,7 +53,6 @@ window.card = (function () {
     offerDialog.querySelector('ul+p').textContent = generatedOffer.offer.description;
     offerDialog.querySelector('.popup__avatar').querySelector('img').src = generatedOffer.author.avatar;
   }
-
   return {
 
     show: function showCard(data) {
