@@ -26,6 +26,7 @@ window.map = (function (pin, backend, msg, card, util) {
       document.removeEventListener('keydown', onDialogEscPress);
     }
   }
+
   // функция делает точку активной при клике на пин и добавляет слушатель на событие keydown
   function onPinClick(evt) {
     card.show(renderableOffers[evt.currentTarget.dataset.index]);

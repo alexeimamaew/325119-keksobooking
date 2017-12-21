@@ -38,7 +38,7 @@ window.data = (function () {
     return randomURL;
   }
 
-  // функция возвращает массив, содержащий случайное количсество элементов
+  // функция возвращает массив, содержащий случайное количество элементов
   function getRandomFeatures(options) {
     var result = [];
     var dirtyFeatures = options.FEATURES.slice();
