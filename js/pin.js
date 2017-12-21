@@ -8,7 +8,7 @@ window.pin = (function () {
     top: PIN_HEIGHT
   };
 
-  //функция создает pins
+  // функция создает pins
   function renderPin(generatedOffer, idx) {
     var adsElement = document.createElement('div');
     var adsImg = document.createElement('img');
