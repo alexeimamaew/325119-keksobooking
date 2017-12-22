@@ -5,6 +5,7 @@ window.map = (function (pin, backend, msg, card, util) {
   var ENTER_KEYCODE = 13;
   var ESC_KEYCODE = 27;
   var START_AMOUNT_OF_ELEMENTS = 5;
+  var renderableOffers = [];
   var OFFER_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
   var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var OFFER_TYPE = ['flat', 'house', 'bungalo'];
@@ -205,7 +206,7 @@ window.map = (function (pin, backend, msg, card, util) {
 
   // функция отрисовывания пинов. Для какого массива мы отрисовываем пины, для этого же массива мы и рисуем диалоги
   function render(data) {
-    var renderableOffers = data;
+    renderableOffers = data;
     var fragment = document.createDocumentFragment();
     data.forEach(function (elem, idx) {
       fragment.appendChild(pin.renderPin(elem, idx));
