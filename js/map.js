@@ -78,9 +78,9 @@ window.map = (function (pin, backend, msg, card, util) {
 
   // функция создания карточек объявлений
   function createApartments(number, titles, type, checkin) {
-    var result = [],
-      obj = {},
-      i;
+    var result = [];
+    var obj = {};
+    var i;
 
     for (i = 0; i < number; i++) {
       obj.author = {};
@@ -201,16 +201,6 @@ window.map = (function (pin, backend, msg, card, util) {
   function onPinEnterPress(evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       onButtonsClick();
-    }
-  }
-
-  // функция деляает пин активным при нажатии клавиши ENTER
-  function onPinEnterPress(evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      card.show(renderableOffers[evt.currentTarget.dataset.index]);
-      deactivateLastPin();
-      evt.currentTarget.classList.add('map__pin--active');
-      document.addEventListener('keydown', onDialogEscPress);
     }
   }
 

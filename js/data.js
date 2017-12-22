@@ -13,8 +13,8 @@ window.data = (function () {
     return possibleValues[randomIndex];
   }
 
-getRandomFrom();
-
+  getRandomFrom();
+  getRandomFromRange();
 
 
 })();
