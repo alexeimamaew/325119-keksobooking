@@ -13,7 +13,7 @@ window.pin = (function () {
     var adsElement = document.createElement('div');
     var adsImg = document.createElement('img');
     adsElement.appendChild(adsImg);
-    adsElement.classList.add('pin');
+    adsElement.classList.add('map__pin');
     adsElement.style.left = (generatedOffer.location.x - PIN_OFFSET.left) + 'px';
     adsElement.style.top = (generatedOffer.location.y - PIN_OFFSET.top) + 'px';
     adsElement.tabIndex = 0;

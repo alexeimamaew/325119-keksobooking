@@ -1,12 +1,27 @@
 'use strict';
 
 window.map = (function (pin, backend, msg, card, util) {
-
   var nearbyAdsList = document.querySelector('.map__pins');
   var ENTER_KEYCODE = 13;
   var ESC_KEYCODE = 27;
-  var START_AMOUNT_OF_ELEMENTS = 3;
+  var START_AMOUNT_OF_ELEMENTS = 5;
   var renderableOffers = [];
+  var OFFER_TITLES = ["Большая уютная квартира", "Маленькая неуютная квартира", "Огромный прекрасный дворец", "Маленький ужасный дворец", "Красивый гостевой домик", "Некрасивый негостеприимный домик", "Уютное бунгало далеко от моря", "Неуютное бунгало по колено в воде"];
+  var OFFER_FEATURES = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
+  var OFFER_TYPE = ["flat", "house", "bungalo"];
+  var OFFFER_CHECKIN_CHECKOUT = ["12:00", "13:00", "14:00"];
+
+  var translate = {
+      flat: "Квартира",
+      bungalo: "Бунгало",
+      house: "Дом"
+    },
+
+    template = document.querySelector("template"),
+    map = document.querySelector(".map"),
+    popupCloseOpen = false,
+    prefClickAtButton = null,
+    popup = null;
 
   // функция диактивирует точки на карте
   function deactivateLastPin() {
@@ -18,21 +33,184 @@ window.map = (function (pin, backend, msg, card, util) {
     });
   }
 
-  // закрытие нажатием ESC
-  function onDialogEscPress(evt) {
+  //  Функция получает удобства в объявлениях
+  function getFeatures(OFFER_FEATURES) {
+    var listLength = OFFER_FEATURES.length;
+    var featureString = "";
+    for (var i = 0; i < listLength; i++) {
+      featureString += "<li class=\'feature feature--" + OFFER_FEATURES[i] + "\' ></li>";
+    }
+    return featureString;
+  }
+
+  // функция получает рондомное значение в диапозоне min/max
+  function getRandomFromRange(min, max) {
+    return Math.round(min + Math.random() * (max - min));
+  }
+
+
+  // функция перетасовки значений в массиве
+  function shuffle(array) {
+    array.sort(function () {
+      return Math.random() - 0.5;
+    });
+    return array;
+  }
+
+
+  // создание массива чисел величиной  number  и его перетасовка
+  function createArr(number) {
+    var arr = [];
+    for (var i = 0; i < number; i++) {
+      arr[i] = i;
+    }
+    return shuffle(arr);
+  }
+
+  // случайные удобства помещений
+  function setFeatureRange() {
+    var optionLength = OFFER_FEATURES.length;
+    var featureAmount = getRandomFromRange(1, optionLength);
+    var featureArray = createArr(optionLength);
+    featureArray.length = featureAmount;
+    for (var i = 0; i < featureAmount; i++) {
+      featureArray[i] = OFFER_FEATURES[featureArray[i]];
+    }
+    return featureArray;
+  }
+
+  //функция создания карточек объявлений
+  function createApartments(number, titles, type, checkin) {
+    var result = [],
+      obj = {},
+      i;
+
+    for (i = 0; i < number; i++) {
+      obj.author = {};
+      obj.offer = {};
+      obj.location = {};
+      obj.author.avatar = "img/avatars/user0" + (i + 1) + ".png";
+      obj.offer.title = titles[getRandomFromRange(0, titles.length - 1)];
+      obj.offer.price = getRandomFromRange(1000, 1000000);
+      obj.offer.type = type[getRandomFromRange(0, type.length - 1)];
+      obj.offer.rooms = getRandomFromRange(1, 5);
+      obj.offer.guests = getRandomFromRange(1, 5);
+      obj.offer.checkin = checkin[getRandomFromRange(0, checkin.length - 1)];
+      obj.offer.checkout = checkin[getRandomFromRange(0, checkin.length - 1)];
+      obj.offer.features = setFeatureRange();
+      obj.offer.description = "";
+      obj.offer.photos = [];
+      obj.location.x = getRandomFromRange(300, 900);
+      obj.location.y = getRandomFromRange(100, 500);
+      obj.offer.address = obj.location.x + ", " + obj.location.y;
+
+      result.push(obj);
+      obj = {};
+    }
+    return result;
+  }
+
+  // функция закрытия popup
+  function closeDialog() {
+    var popup = document.querySelector(".popup");
+    popup.classList.add("hidden");
+    prefClickAtButton.classList.remove("map__pin--active");
+  }
+
+  // функция закрытия popup по кнопке ESC
+  function onPopupEscPress(evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      deactivateLastPin();
-      card.hide();
-      document.removeEventListener('keydown', onDialogEscPress);
+      closeDialog();
     }
   }
 
-  // функция делает точку активной при клике на пин и добавляет слушатель на событие keydown
-  function onPinClick(evt) {
-    card.show(renderableOffers[evt.currentTarget.dataset.index]);
-    deactivateLastPin();
-    evt.currentTarget.classList.add('map__pin--active');
-    document.addEventListener('keydown', onDialogEscPress);
+  // функция закрытия popup по кнопке Enter
+  function onPopupEnterPress(evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      closeDialog();
+    }
+  }
+
+  // функция добавления слушателя в popup
+  function addPopupListener() {
+    var popupClose = map.querySelector(".popup__close");
+    popupClose.addEventListener("click", closeDialog);
+    map.addEventListener("keydown", onPopupEscPress);
+    popupClose.addEventListener("keydown", onPopupEnterPress);
+  }
+
+  //При нажатии на любой из элементов .map__pin ему добавляется класс .map__pin--active и должен показываться элемент .popup
+  function onButtonsClick() {
+    var popup = document.querySelector(".popup");
+    var srcImg = "";
+    var target = event.target;
+    var pin = target.closest(".map__pin");
+    if (!map.contains(pin) || pin.classList.contains("map__pin--main") || !pin) {
+      return;
+    }
+    if (prefClickAtButton) {
+      prefClickAtButton.classList.remove("map__pin--active"); //при нажатии на элемент скрытие класса .map__pin--active у др. элементов
+      prefClickAtButton = pin;
+    } else {
+      prefClickAtButton = pin;
+    }
+    popup.classList.remove("hidden");
+    srcImg = pin.querySelector("img").getAttribute("src");
+    shomAppartmentPopup(srcImg);
+    pin.classList.add("map__pin--active");
+  }
+
+  //функция показывает карточки объявлений с заполненными данными
+  function renderApartmentContent(obj) {
+    var templateArticle = template.content.querySelector(".map__card");
+    var article = null;
+    var mapFilters = map.querySelector(".map__filters-container");
+
+    if (popupCloseOpen === true) {
+      article = document.querySelector(".popup");
+    } else {
+      article = popup;
+      article = templateArticle.cloneNode(true);
+    }
+    article.querySelector("h3").textContent = obj.offer.title;
+    article.querySelector("small").textContent = obj.offer.address;
+    article.querySelector(".popup__price").innerHTML = obj.offer.price + " &#x20bd;/ночь";
+    article.querySelector("h4").textContent = translate[obj.offer.type];
+    article.querySelector("h4+p").textContent = obj.offer.rooms + " для " + obj.offer.guests + " гостей";
+    article.querySelector("h4+p+p").textContent = "Заезд после " + obj.offer.checkin + " выезд до " + obj.offer.checkout;
+    article.querySelector(".popup__features").innerHTML = getFeatures(obj.offer.features);
+    article.querySelector("ul+p").textContent = obj.offer.description;
+    article.querySelector(".popup__avatar").setAttribute("src", obj.author.avatar);
+    map.insertBefore(article, mapFilters); //вставляет элемент article перед mapFilters
+
+    addPopupListener(); //добавление слушателя в popup
+    popupCloseOpen = true;
+  }
+  var apartments = createApartments(8, OFFER_TITLES, OFFER_TYPE, OFFFER_CHECKIN_CHECKOUT, OFFER_FEATURES);
+  renderApartmentContent(apartments[0]);
+
+
+  function shomAppartmentPopup(string) {
+
+    for (var i = 0; i < apartments.length; i++) {
+      if (apartments[i].author.avatar === string) {
+        renderApartmentContent(apartments[i]);
+
+      }
+    }
+  }
+
+  // функция открытия popup по кнопке Enter
+  function onPinEnterPress(evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      onButtonsClick();
+    }
+  }
+
+  //Функция добвляет слушателей на pin
+  function addPinAction() {
+    map.addEventListener("click", onButtonsClick);
+    map.addEventListener("keydown", onPinEnterPress);
   }
 
   // функция деляает пин активным при нажатии клавиши ENTER
@@ -56,7 +234,7 @@ window.map = (function (pin, backend, msg, card, util) {
     var pins = nearbyAdsList.querySelectorAll('.map__pin');
     util.forEach(pins, function (elem) {
       if (!elem.classList.contains('map__pin--main')) {
-        elem.addEventListener('click', onPinClick);
+        elem.addEventListener('click', onButtonsClick);
         elem.addEventListener('keydown', onPinEnterPress);
       }
     });
