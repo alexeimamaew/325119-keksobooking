@@ -33,11 +33,11 @@ window.map = (function (pin, backend, msg, card, util) {
   }
 
   //  Функция получает удобства в объявлениях
-  function getFeatures(OFFER_FEATURES) {
-    var listLength = OFFER_FEATURES.length;
+  function getFeatures(features) {
+    var listLength = features.length;
     var featureString = '';
     for (var i = 0; i < listLength; i++) {
-      featureString += "<li class=\'feature feature--" + OFFER_FEATURES[i] + "\' ></li>";
+      featureString += '<li class="feature feature--' + OFFER_FEATURES[i] + '"></li>';
     }
     return featureString;
   }
@@ -47,7 +47,6 @@ window.map = (function (pin, backend, msg, card, util) {
     return Math.round(min + Math.random() * (max - min));
   }
 
-
   // функция перетасовки значений в массиве
   function shuffle(array) {
     array.sort(function () {
@@ -55,7 +54,6 @@ window.map = (function (pin, backend, msg, card, util) {
     });
     return array;
   }
-
 
   // создание массива чисел величиной  number  и его перетасовка
   function createArr(number) {
