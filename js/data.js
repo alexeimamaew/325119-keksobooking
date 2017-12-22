@@ -1,8 +1,6 @@
 'use strict';
 
 window.data = (function () {
-  var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-
 
   // функция возвращает случайное число в заданном диапазоне
   function getRandomFromRange(min, max) {
@@ -28,18 +26,5 @@ window.data = (function () {
       });
     }
     return randomURL;
-  }
-
-  // функция возвращает массив, содержащий случайное количество элементов
-  function getRandomFeatures(options) {
-    var result = [];
-    var dirtyFeatures = options.FEATURES.slice();
-    var randomLength = Math.floor(Math.random() * options.FEATURES.length);
-    for (var i = 0; i < randomLength; i++) {
-      var randomIdx = Math.floor(Math.random() * dirtyFeatures.length);
-      result.push(dirtyFeatures[randomIdx]);
-      dirtyFeatures.splice(randomIdx, 1);
-    }
-    return result;
   }
 })();
