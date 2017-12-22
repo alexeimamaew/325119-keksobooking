@@ -76,7 +76,7 @@ window.map = (function (pin, backend, msg, card, util) {
     return featureArray;
   }
 
-  //функция создания карточек объявлений
+  // функция создания карточек объявлений
   function createApartments(number, titles, type, checkin) {
     var result = [],
       obj = {},
@@ -109,7 +109,7 @@ window.map = (function (pin, backend, msg, card, util) {
 
   // функция закрытия popup
   function closeDialog() {
-    var popup = document.querySelector('.popup');
+    popup = document.querySelector('.popup');
     popup.classList.add('hidden');
     prefClickAtButton.classList.remove('map__pin--active');
   }
@@ -136,17 +136,17 @@ window.map = (function (pin, backend, msg, card, util) {
     popupClose.addEventListener('keydown', onPopupEnterPress);
   }
 
-  //При нажатии на любой из элементов .map__pin ему добавляется класс .map__pin--active и должен показываться элемент .popup
+  // При нажатии на любой из элементов .map__pin ему добавляется класс .map__pin--active и должен показываться элемент .popup
   function onButtonsClick() {
-    var popup = document.querySelector('.popup');
+    popup = document.querySelector('.popup');
     var srcImg = '';
     var target = event.target;
-    var pin = target.closest('.map__pin');
+    pin = target.closest('.map__pin');
     if (!map.contains(pin) || pin.classList.contains('map__pin--main') || !pin) {
       return;
     }
     if (prefClickAtButton) {
-      prefClickAtButton.classList.remove('map__pin--active'); //при нажатии на элемент скрытие класса .map__pin--active у др. элементов
+      prefClickAtButton.classList.remove('map__pin--active'); // при нажатии на элемент скрытие класса .map__pin--active у др. элементов
       prefClickAtButton = pin;
     } else {
       prefClickAtButton = pin;
@@ -157,7 +157,7 @@ window.map = (function (pin, backend, msg, card, util) {
     pin.classList.add('map__pin--active');
   }
 
-  //функция показывает карточки объявлений с заполненными данными
+  // функция показывает карточки объявлений с заполненными данными
   function renderApartmentContent(obj) {
     var templateArticle = template.content.querySelector('.map__card');
     var article = null;
@@ -178,9 +178,9 @@ window.map = (function (pin, backend, msg, card, util) {
     article.querySelector('.popup__features').innerHTML = getFeatures(obj.offer.features);
     article.querySelector('ul+p').textContent = obj.offer.description;
     article.querySelector('.popup__avatar').setAttribute('src', obj.author.avatar);
-    map.insertBefore(article, mapFilters); //вставляет элемент article перед mapFilters
+    map.insertBefore(article, mapFilters); // вставляет элемент article перед mapFilters
 
-    addPopupListener(); //добавление слушателя в popup
+    addPopupListener(); // добавление слушателя в popup
     popupCloseOpen = true;
   }
   var apartments = createApartments(8, OFFER_TITLES, OFFER_TYPE, OFFFER_CHECKIN_CHECKOUT, OFFER_FEATURES);
@@ -202,12 +202,6 @@ window.map = (function (pin, backend, msg, card, util) {
     if (evt.keyCode === ENTER_KEYCODE) {
       onButtonsClick();
     }
-  }
-
-  //Функция добвляет слушателей на pin
-  function addPinAction() {
-    map.addEventListener('click', onButtonsClick);
-    map.addEventListener('keydown', onPinEnterPress);
   }
 
   // функция деляает пин активным при нажатии клавиши ENTER

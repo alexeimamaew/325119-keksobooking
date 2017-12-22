@@ -13,18 +13,8 @@ window.data = (function () {
     return possibleValues[randomIndex];
   }
 
-  // функция создает уникальный адрес аватарки точки на карте
-  function generateUniqueURL(minAvatarID, maxAvatarID, generatedOffer) {
-    var isAvatarUnique = false;
-    while (!isAvatarUnique) {
-      var randomURL = 'img/avatars/user0' + getRandomFromRange(minAvatarID, maxAvatarID) + '.png';
-      isAvatarUnique = true;
-      generatedOffer.forEach(function (elem) {
-        if (elem.author.avatar === randomURL) {
-          isAvatarUnique = false;
-        }
-      });
-    }
-    return randomURL;
-  }
+getRandomFrom();
+
+
+
 })();
