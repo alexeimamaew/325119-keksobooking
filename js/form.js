@@ -1,12 +1,31 @@
 'use strict';
 
 window.form = (function (sync, backend, msg, util) {
+
+  var capacityValues = {
+    NO_GUESTS: '0',
+    ONE_GUEST: '1',
+    TWO_GUESTS: '2',
+    THREE_GUESTS: '3'
+  };
+  var roomsCountValues = {
+    ONE_ROOM: '1',
+    TWO_ROOMS: '2',
+    THREE_ROOMS: '3',
+    HUNDRED_ROOMS: '100'
+  };
+  var userFormElem = document.querySelector('.notice__form');
   var form = document.querySelector('.notice__form');
   var titleField = form.querySelector('#title');
   var addressField = form.querySelector('#address');
   var timeOutField = form.querySelector('#timeout');
   var timeInField = form.querySelector('#timein');
   var offerDialog = document.querySelector('.popup');
+  var typeField = form.querySelector('#type');
+  var priceField = form.querySelector('#price');
+  var roomsCountField = form.querySelector('#room_number');
+  var capacityField = form.querySelector('#capacity');
+  var invalidFields = form.querySelectorAll('.invalid');
 
   function syncValues(elem, value) {
     if (elem.value !== value) {
@@ -16,10 +35,6 @@ window.form = (function (sync, backend, msg, util) {
 
   sync.syncFields(timeOutField, timeInField, syncValues);
   sync.syncFields(timeInField, timeOutField, syncValues);
-
-  // синхронизации типа / минимальной цены
-  var typeField = form.querySelector('#type');
-  var priceField = form.querySelector('#price');
 
   function syncValueAndMinValue(elem, value, possibleValues1, possibleValues2) {
     switch (value) {
@@ -39,22 +54,6 @@ window.form = (function (sync, backend, msg, util) {
   }
 
   sync.syncFields(priceField, typeField, syncValueAndMinValue, [1000, 0, 5000, 10000], ['flat', 'bungalo', 'house', 'palace']);
-
-  // синхронизация числа гостей / комнат
-  var capacityValues = {
-    NO_GUESTS: '0',
-    ONE_GUEST: '1',
-    TWO_GUESTS: '2',
-    THREE_GUESTS: '3'
-  };
-  var roomsCountValues = {
-    ONE_ROOM: '1',
-    TWO_ROOMS: '2',
-    THREE_ROOMS: '3',
-    HUNDRED_ROOMS: '100'
-  };
-  var roomsCountField = form.querySelector('#room_number');
-  var capacityField = form.querySelector('#capacity');
 
   function syncRoomsCountWithCapacity(elem, value) {
     switch (value) { /* roomField.value */
@@ -92,11 +91,10 @@ window.form = (function (sync, backend, msg, util) {
     evt.target.removeEventListener('input', removeErrorHighlight);
   }
 
-  // только если все три поля валидны, данные отправляются
-  var successHandler = function () {
-    offerDialog.classList.add('hidden');
+  // только если все обязательные поля валидны, данные отправляются
+  function successHandler() {
     form.reset();
-    msg.show('Данные загружены успешно!');
+    alert('Данные загружены успешно!');
   };
 
   form.addEventListener('submit', function (evt) {
@@ -105,17 +103,11 @@ window.form = (function (sync, backend, msg, util) {
       addressField.classList.add('invalid');
     }
 
-    if (titleField.value.length < 30 || titleField.value.length > 100) {
-      evt.preventDefault();
-      titleField.classList.add('invalid');
-    }
-
-    if (priceField.value < priceField.min || priceField.value > priceField.max) {
+   if (priceField.value < priceField.min || priceField.value > priceField.max) {
       evt.preventDefault();
       priceField.classList.add('invalid');
     }
 
-    var invalidFields = form.querySelectorAll('.invalid');
     util.forEach(invalidFields, function (elem) {
       elem.addEventListener('input', removeErrorHighlight);
     });

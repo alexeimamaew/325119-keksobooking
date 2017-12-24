@@ -2,7 +2,6 @@
 
 window.util = (function () {
   var DEBOUNCE_INTERVAL = 500;
-
   var debounce = function (fun) {
     var lastTimeout = null;
     return function () {
@@ -13,7 +12,7 @@ window.util = (function () {
     };
   };
 
-  var getRandomElementsFromArr = function (data, count) {
+  function getRandomElementsFromArr(data, count) {
     var result = [];
     var copy = data.slice();
 
@@ -25,7 +24,7 @@ window.util = (function () {
     return result;
   };
 
-  var forEach = function (arr, func) {
+  function forEach(arr, func) {
     Array.prototype.forEach.call(arr, func);
   };
 
@@ -34,6 +33,4 @@ window.util = (function () {
     getRandomFromArr: getRandomElementsFromArr,
     forEach: forEach
   };
-
 })();
-

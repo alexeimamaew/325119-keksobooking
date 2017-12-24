@@ -1,25 +1,44 @@
 'use strict';
 
-window.map = (function (pin, backend, msg, card, util) {
-  var nearbyAdsList = document.querySelector('.map__pins');
-  var ENTER_KEYCODE = 13;
-  var ESC_KEYCODE = 27;
-  var START_AMOUNT_OF_ELEMENTS = 5;
+window.map = (function (pin, backend, msg, util) {
   var OFFER_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
   var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var OFFER_TYPE = ['flat', 'house', 'bungalo'];
   var OFFFER_CHECKIN_CHECKOUT = ['12:00', '13:00', '14:00'];
+  var ENTER_KEYCODE = 13;
+  var ESC_KEYCODE = 27;
+  var START_AMOUNT_OF_ELEMENTS = 5;
+  var USER_ICON_OFFSETS = {
+    left: 37,
+    top: 94
+  };
+  var MIN_COORDS = {
+    x: 0,
+    y: 100
+  };
+  var MAX_COORDS = {
+    x: 1150,
+    y: 570
+  };
+  var apartments = createApartments(8, OFFER_TITLES, OFFER_TYPE, OFFFER_CHECKIN_CHECKOUT, OFFER_FEATURES);
+  var nearbyAdsList = document.querySelector('.map__pins');
   var translate = {
     flat: 'Квартира',
     bungalo: 'Бунгало',
     house: 'Дом'
   };
-
   var template = document.querySelector('template');
   var map = document.querySelector('.map');
   var popupCloseOpen = false;
   var prefClickAtButton = null;
   var popup = null;
+  var pinMain = document.querySelector('.map__pin--main');
+  var addressField = document.querySelector('#address');
+
+  function successHandler(data) {
+    var randomElements = util.getRandomFromArr(data, START_AMOUNT_OF_ELEMENTS);
+    render(randomElements);
+  };
 
   // функция диактивирует точки на карте
   function deactivateLastPin() {
@@ -31,7 +50,7 @@ window.map = (function (pin, backend, msg, card, util) {
     });
   }
 
-  //  Функция получает удобства в объявлениях
+  // Функция получает удобства в объявлениях
   function getFeatures(features) {
     var listLength = features.length;
     var featureString = '';
@@ -136,7 +155,7 @@ window.map = (function (pin, backend, msg, card, util) {
   }
 
   // При нажатии на любой из элементов .map__pin ему добавляется класс .map__pin--active и должен показываться элемент .popup
-  function onButtonsClick() {
+  function onButtonsClick(evt) {
     popup = document.querySelector('.popup');
     var srcImg = '';
     var target = event.target;
@@ -182,19 +201,17 @@ window.map = (function (pin, backend, msg, card, util) {
     addPopupListener(); // добавление слушателя в popup
     popupCloseOpen = true;
   }
-  var apartments = createApartments(8, OFFER_TITLES, OFFER_TYPE, OFFFER_CHECKIN_CHECKOUT, OFFER_FEATURES);
-  renderApartmentContent(apartments[0]);
-
 
   function shomAppartmentPopup(string) {
 
     for (var i = 0; i < apartments.length; i++) {
       if (apartments[i].author.avatar === string) {
         renderApartmentContent(apartments[i]);
-
       }
     }
   }
+
+  renderApartmentContent(apartments[0]);
 
   // функция открытия popup по кнопке Enter
   function onPinEnterPress(evt) {
@@ -203,11 +220,17 @@ window.map = (function (pin, backend, msg, card, util) {
     }
   }
 
+  document.addEventListener("DOMContentLoaded", setAdress);
+
+  function setAdress() {
+      addressField.value = 'x:' + pinMain.offsetLeft + ', y:' + pinMain.offsetTop;
+    }
+
   // функция отрисовывания пинов. Для какого массива мы отрисовываем пины, для этого же массива мы и рисуем диалоги
   function render(data) {
     var fragment = document.createDocumentFragment();
     data.forEach(function (elem, idx) {
-      fragment.appendChild(pin.renderPin(elem, idx));
+      fragment.appendChild(window.pin.renderPin(elem, idx));
     });
     nearbyAdsList.appendChild(fragment);
     var pins = nearbyAdsList.querySelectorAll('.map__pin');
@@ -219,30 +242,7 @@ window.map = (function (pin, backend, msg, card, util) {
     });
   }
 
-  var successHandler = function (data) {
-    var randomElements = util.getRandomFromArr(data, START_AMOUNT_OF_ELEMENTS);
-    render(randomElements);
-  };
-
   backend.load(successHandler, msg.show);
-
-  var USER_ICON_OFFSETS = {
-    left: 37,
-    top: 94
-  };
-
-  var MIN_COORDS = {
-    x: 0,
-    y: 100
-  };
-
-  var MAX_COORDS = {
-    x: 1150,
-    y: 570
-  };
-
-  var pinMain = document.querySelector('.map__pin--main');
-  var addressField = document.querySelector('#address');
 
   // кнопку мыши нажали
   pinMain.addEventListener('mousedown', function (evt) {
@@ -255,7 +255,7 @@ window.map = (function (pin, backend, msg, card, util) {
     };
 
     // функция передвижения мыши
-    var onMouseMove = function (moveEvt) {
+    function onMouseMove(moveEvt) {
       moveEvt.preventDefault();
       var shift = {
         x: (startCoords.x - moveEvt.clientX),
@@ -284,7 +284,7 @@ window.map = (function (pin, backend, msg, card, util) {
     };
 
     // кнопку мыши отпустили
-    var onMouseUp = function (upEvt) {
+    function onMouseUp(upEvt) {
       upEvt.preventDefault();
       addressField.value = 'x:' + (pinMain.offsetLeft + USER_ICON_OFFSETS.left) + ', y:' + (pinMain.offsetTop + USER_ICON_OFFSETS.top);
       document.removeEventListener('mousemove', onMouseMove);
@@ -300,4 +300,4 @@ window.map = (function (pin, backend, msg, card, util) {
     deactivateLastPin: deactivateLastPin
   };
 
-})(window.pin, window.backend, window.msg, window.card, window.util);
+})(window.pin, window.backend, window.msg, window.util);
