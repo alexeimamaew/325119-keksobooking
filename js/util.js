@@ -22,11 +22,11 @@ window.util = (function () {
       copy.splice(randomIdx, 1);
     }
     return result;
-  };
+  }
 
   function forEach(arr, func) {
     Array.prototype.forEach.call(arr, func);
-  };
+  }
 
   return {
     debounce: debounce,

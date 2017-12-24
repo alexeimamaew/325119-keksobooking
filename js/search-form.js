@@ -30,7 +30,7 @@ window.search = (function (map, backend, util, msg) {
     } else {
       return elem.offer.type === housingType.value;
     }
-  };
+  }
 
   // фильтр по количеству комнат
   function filterOffersByRoomsCount(elem) {
@@ -39,7 +39,7 @@ window.search = (function (map, backend, util, msg) {
     } else {
       return elem.offer.rooms === Number(housingRooms.value);
     }
-  };
+  }
 
   // фильтр по цене
   function filterOffersByPrice(elem) {
@@ -55,7 +55,7 @@ window.search = (function (map, backend, util, msg) {
       default:
         return false;
     }
-  };
+  }
 
   // фильтр по количеству гостей
   function filterOffersByGuestsCount(elem) {
@@ -64,7 +64,7 @@ window.search = (function (map, backend, util, msg) {
     } else {
       return elem.offer.guests === Number(housingGuests.value);
     }
-  };
+  }
 
   function filterOffersByFeatures(elem) { // фильтр по features
     var featureCheckedCheckboxes = filtersForm.querySelectorAll('.feature input[type="checkbox"]:checked');
@@ -74,7 +74,7 @@ window.search = (function (map, backend, util, msg) {
     return checkedFeatures.every(function (feature) {
       return elem.offer.features.indexOf(feature) > -1;
     });
-  };
+  }
 
   // функция фильтрует объявления и отправляет на отрисовку
   function updatePins() {
@@ -83,7 +83,7 @@ window.search = (function (map, backend, util, msg) {
       return initial.filter(elem);
     }, offers);
     map.render(filteredData);
-  };
+  }
 
   util.forEach(filters, function (elem) {
     elem.addEventListener('change', util.debounce(updatePins));
@@ -95,7 +95,7 @@ window.search = (function (map, backend, util, msg) {
 
   function successHandler(data) {
     offers = data;
-  };
+  }
 
   backend.load(successHandler, msg.show);
 

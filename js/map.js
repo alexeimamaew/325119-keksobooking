@@ -38,7 +38,7 @@ window.map = (function (pin, backend, msg, util) {
   function successHandler(data) {
     var randomElements = util.getRandomFromArr(data, START_AMOUNT_OF_ELEMENTS);
     render(randomElements);
-  };
+  }
 
   // функция диактивирует точки на карте
   function deactivateLastPin() {
@@ -155,7 +155,7 @@ window.map = (function (pin, backend, msg, util) {
   }
 
   // При нажатии на любой из элементов .map__pin ему добавляется класс .map__pin--active и должен показываться элемент .popup
-  function onButtonsClick(evt) {
+  function onButtonsClick() {
     popup = document.querySelector('.popup');
     var srcImg = '';
     var target = event.target;
@@ -220,11 +220,11 @@ window.map = (function (pin, backend, msg, util) {
     }
   }
 
-  document.addEventListener("DOMContentLoaded", setAdress);
+  document.addEventListener('DOMContentLoaded', setAdress);
 
   function setAdress() {
-      addressField.value = 'x:' + pinMain.offsetLeft + ', y:' + pinMain.offsetTop;
-    }
+    addressField.value = 'x:' + pinMain.offsetLeft + ', y:' + pinMain.offsetTop;
+  }
 
   // функция отрисовывания пинов. Для какого массива мы отрисовываем пины, для этого же массива мы и рисуем диалоги
   function render(data) {
@@ -281,7 +281,7 @@ window.map = (function (pin, backend, msg, util) {
       } else {
         addressField.classList.remove('invalid');
       }
-    };
+    }
 
     // кнопку мыши отпустили
     function onMouseUp(upEvt) {
@@ -289,7 +289,7 @@ window.map = (function (pin, backend, msg, util) {
       addressField.value = 'x:' + (pinMain.offsetLeft + USER_ICON_OFFSETS.left) + ', y:' + (pinMain.offsetTop + USER_ICON_OFFSETS.top);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-    };
+    }
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
