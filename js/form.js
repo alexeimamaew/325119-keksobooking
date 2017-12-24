@@ -14,13 +14,10 @@ window.form = (function (sync, backend, msg, util) {
     THREE_ROOMS: '3',
     HUNDRED_ROOMS: '100'
   };
-//  var userFormElem = document.querySelector('.notice__form');
   var form = document.querySelector('.notice__form');
-//  var titleField = form.querySelector('#title');
   var addressField = form.querySelector('#address');
   var timeOutField = form.querySelector('#timeout');
   var timeInField = form.querySelector('#timein');
-//  var offerDialog = document.querySelector('.popup');
   var typeField = form.querySelector('#type');
   var priceField = form.querySelector('#price');
   var roomsCountField = form.querySelector('#room_number');
@@ -94,20 +91,20 @@ window.form = (function (sync, backend, msg, util) {
   // только если все обязательные поля валидны, данные отправляются
   function successHandler() {
     form.reset();
-    };
+  }
 
-  form.addEventListener('submit', function(evt) {
+  form.addEventListener('submit', function (evt) {
     if (addressField.value === '') {
       evt.preventDefault();
-      addressField.classList.add('invalid')
+      addressField.classList.add('invalid');
     }
 
-     if (priceField.value < priceField.min || priceField.value > priceField.max) {
+    if (priceField.value < priceField.min || priceField.value > priceField.max) {
       evt.preventDefault();
       priceField.classList.add('invalid');
     }
 
-    util.forEach(invalidFields, function(elem) {
+    util.forEach(invalidFields, function (elem) {
       elem.addEventListener('input', removeErrorHighlight);
     });
 
