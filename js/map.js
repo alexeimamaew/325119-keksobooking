@@ -155,7 +155,7 @@ window.map = (function (pin, backend, msg, util) {
   }
 
   // При нажатии на любой из элементов .map__pin ему добавляется класс .map__pin--active и должен показываться элемент .popup
-  function onButtonsClick() {
+  function onButtonsClick(event) {
     popup = document.querySelector('.popup');
     var srcImg = '';
     var target = event.target;
@@ -216,7 +216,7 @@ window.map = (function (pin, backend, msg, util) {
   // функция открытия popup по кнопке Enter
   function onPinEnterPress(evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
-      onButtonsClick();
+      onButtonsClick(evt);
     }
   }
 

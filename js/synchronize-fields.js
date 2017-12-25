@@ -10,6 +10,4 @@ window.sync = (function () {
   return {
     syncFields: syncFields
   };
-
-
 })();

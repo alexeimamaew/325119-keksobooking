@@ -78,40 +78,40 @@ window.form = (function (sync, backend, msg, util) {
         }
     }
   }
+sync.syncFields(capacityField, roomsCountField, syncRoomsCountWithCapacity);
+sync.syncFields(roomsCountField, capacityField, syncCapacityWithRoomsCount);
 
-  sync.syncFields(capacityField, roomsCountField, syncRoomsCountWithCapacity);
-  sync.syncFields(roomsCountField, capacityField, syncCapacityWithRoomsCount);
-
-  // функция удаляет красную подсвтеку невалидного поля
-  function removeErrorHighlight(evt) {
+// функция удаляет красную подсвтеку невалидного поля
+function removeErrorHighlight(evt) {
     evt.target.classList.remove('invalid');
     evt.target.removeEventListener('input', removeErrorHighlight);
-  }
+}
 
-  // только если все обязательные поля валидны, данные отправляются
-  function successHandler() {
+// только если все обязательные поля валидны, данные отправляются
+function successHandler() {
     form.reset();
-  }
+}
 
-  form.addEventListener('submit', function (evt) {
+form.addEventListener('submit', function (evt) {
     if (addressField.value === '') {
-      evt.preventDefault();
-      addressField.classList.add('invalid');
+        evt.preventDefault();
+        addressField.classList.add('invalid');
+        return false;
     }
 
-    if (priceField.value < priceField.min || priceField.value > priceField.max) {
-      evt.preventDefault();
-      priceField.classList.add('invalid');
+    if (priceField.value < priceField.min) {
+        evt.preventDefault();
+        priceField.classList.add('invalid');
+        return false;
     }
-
     util.forEach(invalidFields, function (elem) {
-      elem.addEventListener('input', removeErrorHighlight);
+        elem.addEventListener('input', removeErrorHighlight);
     });
 
     if (invalidFields.length === 0) {
-      evt.preventDefault();
-      backend.save(new FormData(form), successHandler, msg.show);
+        evt.preventDefault();
+        backend.save(new FormData(form), successHandler, msg.show);
     }
-  });
+});
 
 })(window.sync, window.backend, window.msg, window.util);
